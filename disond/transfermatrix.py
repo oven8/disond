@@ -31,11 +31,15 @@ class transfermatrix:
     def propagation(self, mat_index):
         exp = np.exp(-1j * self.kz[mat_index, :, :] * self.d[mat_index])
         return np.array([[exp, np.zeros(exp.shape)], [np.zeros(exp.shape), 1/exp]])
+    
+    def propagation_arb(self, distance):
+        exp = np.exp(-1j * self.kz[mat_index, :, :] * distance)
+        return np.array([[exp, np.zeros(exp.shape)], [np.zeros(exp.shape), 1/exp]])
 
 class TM_materials(transfermatrix):
 
-    def __init__(self, mat_list, omega, theta):
-        materials = st.materials(mat_list)
+    def __init__(self, mat_list, omega, theta, lambda0 = st.LAMBDA0):
+        materials = st.materials(mat_list, lambda0 = lambda0)
         n = materials.ref
         d = materials.len
         

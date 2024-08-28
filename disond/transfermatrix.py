@@ -1,8 +1,8 @@
 import numpy as np
-import static as st
+from .static import C, OMEGA, THETA, LAMBDA0, materials
 
 class transfermatrix:
-    def __init__(self, n, d, omega, theta):
+    def __init__(self, n, d, omega = OMEGA, theta = THETA):
         self.n = n
         self.d = d
         self.omega = np.atleast_1d(omega)
@@ -11,13 +11,13 @@ class transfermatrix:
         self.kz = self.kz()
         
     def kx(self):
-        return np.outer(self.omega / st.C, np.sin(self.theta))
+        return np.outer(self.omega / C, np.sin(self.theta))
 
     def kz(self):
         n_broadcast = self.n[:, np.newaxis, np.newaxis]
         omega_broadcast = self.omega[np.newaxis, :, np.newaxis]
         kx_broadcast = self.kx[np.newaxis, :, :]
-        return np.sqrt(((n_broadcast * omega_broadcast) / st.C)**2 - kx_broadcast**2)
+        return np.sqrt(((n_broadcast * omega_broadcast) / C)**2 - kx_broadcast**2)
 
     def kzratio(self, dir):
         return self.kz[dir[1], :, :] / self.kz[dir[0], :, :]
@@ -38,10 +38,10 @@ class transfermatrix:
 
 class TM_materials(transfermatrix):
 
-    def __init__(self, mat_list, omega, theta, lambda0 = st.LAMBDA0):
-        materials = st.materials(mat_list, lambda0 = lambda0)
-        n = materials.ref
-        d = materials.len
+    def __init__(self, mat_list, omega = OMEGA, theta = THETA, lambda0 = LAMBDA0):
+        mat = materials(mat_list, lambda0 = lambda0)
+        n = mat.ref
+        d = mat.len
         
         super().__init__(n, d, omega, theta)
 
@@ -50,5 +50,5 @@ class TM_materials(transfermatrix):
 #theta = np.array([0.1,0.2,0.3,0.4,0.5])
 #test = transfermatrix(n,omega,theta)
 #print(test.kzratio.shape)
-TNM = TM_materials(["Air","SiO2","TiO2"],2,1)
-print(TNM.propagation(2).shape)
+#TNM = TM_materials(["Air","SiO2","TiO2"],2,1)
+#print(TNM.propagation(2).shape)

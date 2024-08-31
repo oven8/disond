@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from .transfermatrix import TM_materials
 from .static import OMEGA, THETA, LAMBDA0
 
-class bilayer_PC:
+class bilayer_qw:
     def __init__(self, mat_list, sequence, omega = OMEGA, theta = THETA, lambda0 = LAMBDA0, air = True):
         if len(mat_list) > 2:
             raise ValueError("Bilayer module only supports two materials!")
@@ -65,6 +65,10 @@ class bilayer_PC:
 
     @property
     def plot_transmission_bands(self):
+        if hasattr(self, 'M') == False:
+            self.calculate_matrices
+        if hasattr(self, 'T') == False:
+            self.calculate_coefficients
         theta_grid, omega_grid = np.meshgrid(self.theta, self.omega)
         f1, ax = plt.subplots()
         cs = ax.contourf(theta_grid, omega_grid, self.T) #'LineColor', 'none')

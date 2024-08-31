@@ -40,10 +40,12 @@ class TM_materials(transfermatrix):
 
     def __init__(self, mat_list, omega = OMEGA, theta = THETA, lambda0 = LAMBDA0):
         mat = materials(mat_list, lambda0 = lambda0)
-        n = mat.ref
-        d = mat.len
-        
-        super().__init__(n, d, omega, theta)
+        super().__init__(mat.ref, mat.qw_len, omega, theta)
+
+class TM_layers(transfermatrix):
+
+    def __init__(self, layer_list, omega = OMEGA, theta = THETA, lambda0 = LAMBDA0):
+        super().__init__(layertype.ref, layertype.len, omega, theta)
 
 #n = np.array([1.4,2.2])
 #omega = np.array([1,2,3,4,5])

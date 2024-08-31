@@ -6,7 +6,6 @@ class materials:
         self.lambda0 = lambda0
         self.mat_list = mat_list
         self.ref = self.mat_ref()
-        self.len = self.mat_len()
     
     def mat_ref(self):
         mat = {
@@ -23,8 +22,14 @@ class materials:
     
         return np.array(result)
 
-    def mat_len(self):
+    @property
+    def qw_len(self):
         width = (self.lambda0/4)/np.real(self.ref)
+        return width
+    
+    @property
+    def hw_len(self):
+        width = (self.lambda0/2)/np.real(self.ref)
         return width
 
 #mat = materials(['SiO2','TiO2'])
